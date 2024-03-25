@@ -1,6 +1,6 @@
 # Use the official Node.js 16 image as a parent image
 FROM node:20-slim
-
+LABEL org.opencontainers.image.description = "A simple Node.js web server that uses Puppeteer to take screenshots of web pages."
 # Set the working directory
 WORKDIR /app
 
