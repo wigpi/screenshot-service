@@ -16,13 +16,13 @@ const initBrowser = async () => {
         try {
             console.log(`Starting Chrome (attempt ${i + 1}/${browserStartAttempts})...`);
             browser = await puppeteer.launch({
-                headless: false,
+                headless: true,
                 ignoreHTTPSErrors: true,
                 args: [
                     '--disable-infobars',
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                    '--disable-gpu=False',
+                    '--disable-dev-shm-usage',
                     '--enable-webgl',
                 ],
                 timeout: 10000,
@@ -34,7 +34,7 @@ const initBrowser = async () => {
         } catch (error) {
             console.log(`Error during Chrome startup (attempt ${i + 1}/${browserStartAttempts}):`, error);
 
-            if (browser && browser.isConnected()) {
+            if (browser?.isConnected()) {
                 console.log("Closing browser...");
                 await browser.close();
             }
@@ -50,7 +50,7 @@ const initBrowser = async () => {
 
 // Middleware to ensure the browser is available for each request
 const ensureBrowser = async (req, res, next) => {
-    if (!browser || !browser.isConnected()) {
+    if (!browser?.isConnected()) {
         console.log("Reinitializing browser...");
         await initBrowser();
     }
